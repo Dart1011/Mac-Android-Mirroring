@@ -4,9 +4,9 @@ import XCTest
 final class AudioCodecTests: XCTestCase {
   func test_parse_known() {
     XCTAssertEqual(AudioCodec.parse(fourCC: fourCC("opus")), .opus)
-    XCTAssertEqual(AudioCodec.parse(fourCC: fourCC(" aac")), .aac)
+    XCTAssertEqual(AudioCodec.parse(fourCC: fourCC("\0aac")), .aac)
     XCTAssertEqual(AudioCodec.parse(fourCC: fourCC("flac")), .flac)
-    XCTAssertEqual(AudioCodec.parse(fourCC: fourCC("raw ")), .raw)
+    XCTAssertEqual(AudioCodec.parse(fourCC: fourCC("\0raw")), .raw)
   }
 
   func test_parse_unknown() {

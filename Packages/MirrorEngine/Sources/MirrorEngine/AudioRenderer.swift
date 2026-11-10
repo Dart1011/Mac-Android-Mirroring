@@ -27,6 +27,7 @@ public final class AudioRenderer: @unchecked Sendable {
   private let player = AVAudioPlayerNode()
   private let outputFormat: AVAudioFormat
   private var engineStarted = false
+  private let noMoreDataError: OSStatus = -12345
 
   /// True while paused — `feed()` drops packets so the buffer queue doesn't
   /// grow and old audio doesn't burst out on resume.
@@ -191,7 +192,7 @@ public final class AudioRenderer: @unchecked Sendable {
       ablPtr.unsafeMutablePointer,
       nil
     )
-    if status != noErr {
+    if status != noErr && status != noMoreDataError {
       print("[audio] AudioConverterFillComplexBuffer status=\(status)")
       return
     }
@@ -209,7 +210,7 @@ public final class AudioRenderer: @unchecked Sendable {
   ) -> OSStatus {
     guard !pendingPacketConsumed, let packet = pendingPacket else {
       ioNumberDataPackets.pointee = 0
-      return noErr
+      return noMoreDataError
     }
     let count = packet.count
 

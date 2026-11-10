@@ -27,6 +27,29 @@ struct SyncSmoke {
     let conn = try await adb.openSyncTransport(serial: device.id)
     let session = SyncSession(connection: conn)
 
+    let args = ProcessInfo.processInfo.arguments
+    if args.count == 3 {
+      let local = URL(fileURLWithPath: args[1])
+      let remote = args[2]
+      let expected = try Data(contentsOf: local)
+      print("==> SEND \(local.path) -> \(remote) (\(expected.count) bytes) …")
+      try await session.send(local, to: remote)
+      let uploaded = try await session.stat(remote)
+      guard uploaded.size == expected.count else {
+        throw DroidMirroringError.fileTransfer("upload size mismatch: got \(uploaded.size), expected \(expected.count)")
+      }
+      let roundTrip = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("sync-smoke-roundtrip-\(UUID().uuidString)")
+      defer { try? FileManager.default.removeItem(at: roundTrip) }
+      try await session.recv(remote, into: roundTrip, total: UInt64(uploaded.size))
+      let actual = try Data(contentsOf: roundTrip)
+      guard actual == expected else {
+        throw DroidMirroringError.fileTransfer("upload round-trip contents differ")
+      }
+      try await session.quit()
+      print("==> UPLOAD ROUND TRIP PASSED (\(actual.count) bytes)")
+      return
+    }
+
     // 2. LIST /sdcard
     print("==> LIST /sdcard …")
     let entries = try await session.list("/sdcard")

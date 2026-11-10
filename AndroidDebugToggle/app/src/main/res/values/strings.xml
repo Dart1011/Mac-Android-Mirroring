@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mirror Debug</string>
+    <string name="status_on">USB and Wireless debugging are ON</string>
+    <string name="status_off">USB and Wireless debugging are OFF</string>
+    <string name="turn_on">Turn ON</string>
+    <string name="turn_off">Turn OFF</string>
+    <string name="confirm_enable">Are you sure you want to turn USB and Wireless debugging ON?</string>
+    <string name="confirm_disable">Are you sure you want to turn USB and Wireless debugging OFF? Mac mirroring will disconnect.</string>
+    <string name="add_shortcut">Add to Home screen</string>
+    <string name="open_developer_options">Open Developer Options</string>
+    <string name="enabled_toast">USB and Wireless debugging enabled</string>
+    <string name="disabled_toast">USB and Wireless debugging disabled</string>
+    <string name="permission_required">Permission required. Grant WRITE_SECURE_SETTINGS once through ADB.</string>
+    <string name="shortcut_unsupported">Pinned shortcuts are not supported by this launcher. Add Mirror Debug manually.</string>
+</resources>

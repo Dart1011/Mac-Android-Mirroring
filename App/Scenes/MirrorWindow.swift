@@ -209,7 +209,7 @@ final class MirrorWindowController: NSWindowController {
       }
       // Restore device media volume if we muted it for "mac" audio mode.
       if let serial = deviceSerial, let vol = savedDeviceVolume {
-        try? await adb.shell("media volume --stream 3 --set \(vol)", serial: serial)
+        _ = try? await adb.shell("cmd media_session volume --stream 3 --set \(vol)", serial: serial)
         savedDeviceVolume = nil
       }
       await session.stop()
@@ -437,9 +437,8 @@ final class MirrorWindowController: NSWindowController {
 
   private func fetchDeviceVolume(serial: String) async -> Int? {
     do {
-      let out = try await adb.shell("media volume --stream 3 --get", serial: serial)
-      // "Volume is 7" or similar
-      if let r = out.range(of: #"(\d+)"#, options: .regularExpression) {
+      let out = try await adb.shell("cmd media_session volume --stream 3 --get", serial: serial)
+      if let r = out.range(of: #"volume is [0-9]+"#, options: [.regularExpression, .caseInsensitive]) {
         return Int(out[r].filter(\.isNumber))
       }
     } catch {}
@@ -448,7 +447,7 @@ final class MirrorWindowController: NSWindowController {
 
   private func setDeviceVolume(serial: String, level: Int) async {
     do {
-      _ = try await adb.shell("media volume --stream 3 --set \(level)", serial: serial)
+      _ = try await adb.shell("cmd media_session volume --stream 3 --set \(level)", serial: serial)
     } catch {}
   }
 

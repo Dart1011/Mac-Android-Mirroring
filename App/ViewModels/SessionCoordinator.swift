@@ -432,7 +432,7 @@ final class SessionCoordinator: ObservableObject {
       videoBitRate: bitrateMbps * 1_000_000,
       maxFps: maxFps,
       videoCodec: codec,
-      audioCodec: "opus",
+      audioCodec: "aac",
       audioEnabled: audioEnabled && audioOutput == "mac",
       controlEnabled: true,
       displayId: displayId

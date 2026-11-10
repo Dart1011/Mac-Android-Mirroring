@@ -27,6 +27,7 @@ App/Resources/.adb.sha
 # Signing
 *.entitlements.local
 *.provisionprofile
+AndroidDebugToggle/debug.keystore
 ExportOptions.plist
 
 # Logs

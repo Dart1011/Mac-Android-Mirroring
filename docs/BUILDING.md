@@ -87,6 +87,13 @@ swift run sync-smoke
 Lists `/sdcard`, stats the first file, pulls it (if ≤ 5 MiB) to a temp file,
 verifies size, QUITs. Prints `SYNC SMOKE PASSED` on success.
 
+To verify an upload and byte-for-byte download round trip, pass a local file and
+its destination on the device:
+
+```sh
+swift run sync-smoke /absolute/path/to/local-file /sdcard/Download/transfer-check.txt
+```
+
 ### scrcpy-smoke
 
 Drives a full scrcpy-server launch (push, reverse, app_process, accept) and

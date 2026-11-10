@@ -10,13 +10,13 @@ public enum AudioCodec: Sendable, Equatable {
   case flac
   case raw
 
-  /// Parse a big-endian FourCC. scrcpy uses ASCII tags, e.g. "opus", " aac", "flac", "raw ".
+  /// Parse a big-endian FourCC. scrcpy uses ASCII tags, e.g. "opus", "\0aac", "flac", "\0raw".
   public static func parse(fourCC value: UInt32) -> AudioCodec? {
     switch value {
     case Self.fourCC("opus"): return .opus
-    case Self.fourCC(" aac"): return .aac
+    case Self.fourCC("\0aac"): return .aac
     case Self.fourCC("flac"): return .flac
-    case Self.fourCC("raw "): return .raw
+    case Self.fourCC("\0raw"): return .raw
     default: return nil
     }
   }
