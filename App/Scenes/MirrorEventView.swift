@@ -123,11 +123,10 @@ final class MirrorEventView: NSView, NSTextInputClient {
       return
     }
     if event.phase == .began || (scrollOrigin == nil && event.momentumPhase == .began) { scrollOrigin = (x, y) }
-    let d: Double
-    if event.hasPreciseScrollingDeltas { d = event.modifierFlags.contains(.option) ? 1500.0 : 800.0 }
-    else { d = 10.0 }
-    var dx = -event.scrollingDeltaX / d; var dy = event.scrollingDeltaY / d
-    dx = max(-0.05, min(0.05, dx)); dy = max(-0.05, min(0.05, dy))
+    let scale: Double
+    if event.hasPreciseScrollingDeltas { scale = event.modifierFlags.contains(.option) ? 10.0 : 40.0 }
+    else { scale = 1.0 }
+    let dy = max(-1.0, min(1.0, event.scrollingDeltaY / scale))
     if abs(dy) > 0.0001 {
       let o = scrollOrigin ?? (x, y)
       controlSink?(.scroll(x: o.0, y: o.1, screenWidth: UInt16(deviceDimensions.width), screenHeight: UInt16(deviceDimensions.height), hscroll: 0, vscroll: dy, buttons: currentButtons))
